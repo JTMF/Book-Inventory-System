@@ -1,0 +1,292 @@
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .pages {
+    padding: 18px 8px;
+  }
+  header .container {
+    padding: 12px 8px;
+  }
+  .dashboard-grid {
+    gap: 16px;
+  }
+  .home {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 0.97em;
+  }
+  .pages {
+    padding: 8px 2px;
+  }
+  header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 2px;
+  }
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav a,
+  nav button {
+    margin-left: 0;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .transaction-details,
+  .stocktake-details,
+  .report-card {
+    padding: 16px 8px;
+    margin-bottom: 12px;
+  }
+  form.signup,
+  form.login {
+    padding: 16px 8px;
+    margin: 24px auto;
+  }
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
+
+
+:root {
+  --primary: #2a7ae4; /* Office blue */
+  --primary-dark: #2056a3;
+  --accent: #f5f6fa; /* Light gray */
+  --error: #e7195a;
+  --card-shadow: 0 2px 8px rgba(40, 54, 80, 0.08);
+  --border-radius: 10px;
+}
+
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--accent);
+  color: #2d3436;
+}
+
+
+.pages {
+  max-width: 1400px;
+  padding: 32px 24px;
+  margin: 0 auto;
+}
+
+
+/* Header/Navbar */
+header {
+  background: var(--primary);
+  box-shadow: var(--card-shadow);
+}
+header .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+nav {
+  display: flex;
+  align-items: center;
+}
+nav a,
+nav button {
+  margin-left: 16px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+nav a {
+  color: #fff;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--border-radius);
+}
+nav a:hover {
+  background: var(--primary-dark);
+  color: #f5f6fa;
+}
+
+
+/* Navbar button styling */
+nav button {
+  background: #fff;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 8px 18px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-family: "Poppins";
+  font-size: 1em;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+nav button:hover {
+  background: var(--primary-dark);
+  color: #fff;
+}
+
+
+
+
+/* Form elements */
+label,
+input,
+select,
+button {
+  display: block;
+  width: 100%;
+}
+
+
+input {
+  padding: 12px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+  border: 1px solid #b2bec3;
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  font-size: 1em;
+  background: #fff;
+  transition: border 0.2s;
+}
+input:focus {
+  border: 1.5px solid var(--primary);
+  outline: none;
+}
+
+
+/* Style select as button */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #fff;
+  color: #2d3436;
+  border: 1px solid #b2bec3;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-family: "Poppins";
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+select:focus {
+  border: 1.5px solid var(--primary);
+  outline: none;
+}
+
+
+button {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  box-shadow: var(--card-shadow);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+button:not(form.login button):not(form.signup button):hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 16px rgba(40, 54, 80, 0.12);
+}
+
+
+/* Login and Signup buttons - no hover CSS, handled by inline JS */
+form.login button,
+form.signup button {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--border-radius);
+  padding: 10px 24px;
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  font-family: "Poppins";
+  font-size: 1em;
+  font-weight: 600;
+  box-shadow: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+form.login button:disabled,
+form.signup button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+input.error {
+  border: 1.5px solid var(--error);
+}
+
+
+div.error {
+  padding: 12px;
+  background: #ffefef;
+  border: 1.5px solid var(--error);
+  color: var(--error);
+  border-radius: var(--border-radius);
+  margin: 12px 0;
+}
+
+
+.home {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 36px;
+}
+
+
+.transaction-details,
+.stocktake-details,
+.report-card {
+  background: #fff;
+  border-radius: var(--border-radius);
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.2s;
+}
+.transaction-details:hover,
+.stocktake-details:hover,
+.report-card:hover {
+  box-shadow: 0 4px 16px rgba(40, 54, 80, 0.12);
+}
+
+
+form.signup,
+form.login {
+  max-width: 400px;
+  margin: 48px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+}
+
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
