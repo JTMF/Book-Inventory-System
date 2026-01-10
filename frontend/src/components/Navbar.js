@@ -168,6 +168,16 @@ const Navbar = () => {
                             >
                                 Reports
                             </NavLink>
+                            {user.role === "admin" && (
+                                <NavLink
+                                    to="/users"
+                                    style={({ isActive }) => getLinkStyle(isActive)}
+                                    onMouseOver={(e) => handleNavHover(e, e.target.className.includes("active"))}
+                                    onMouseOut={(e) => handleNavLeave(e, e.target.className.includes("active"))}
+                                >
+                                    Users
+                                </NavLink>
+                            )}
                             <button onClick={handleClick} style={{
                                 background: "var(--primary)",
                                 color: "#fff",

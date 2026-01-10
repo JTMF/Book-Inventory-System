@@ -1,0 +1,27 @@
+const jwt = require("jsonwebtoken")
+const User = require("../models/userModel")
+
+const requireAdmin = async (req, res, next) => {
+    const { authorization } = req.headers
+
+    if (!authorization) {
+        return res.status(401).json({ error: "Authorization token required" })
+    }
+
+    const token = authorization.split(" ")[1]
+
+    try {
+        const { _id, role } = jwt.verify(token, process.env.SECRET)
+
+        if (role !== "admin") {
+            return res.status(403).json({ error: "Admin access required" })
+        }
+
+        req.user = await User.findOne({ _id })
+        next()
+    } catch (error) {
+        res.status(401).json({ error: "Request is not authorized" })
+    }
+}
+
+module.exports = requireAdmin
