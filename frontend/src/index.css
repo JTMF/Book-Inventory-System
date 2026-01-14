@@ -205,28 +205,32 @@ button {
   box-shadow: var(--card-shadow);
   transition: background 0.2s, box-shadow 0.2s;
 }
-button:hover {
+button:not(form.login button):not(form.signup button):hover {
   background: var(--primary-dark);
   box-shadow: 0 4px 16px rgba(40, 54, 80, 0.12);
 }
 
 
-/* Login button with office blue */
-form.login button {
-  background: var(--primary-dark);
+/* Login and Signup buttons - no hover CSS, handled by inline JS */
+form.login button,
+form.signup button {
+  background: var(--primary);
   color: #fff;
   border-radius: var(--border-radius);
-  padding: 12px 24px;
-  border: 0;
+  padding: 10px 24px;
+  border: 2px solid var(--primary);
   cursor: pointer;
   font-family: "Poppins";
   font-size: 1em;
-  font-weight: 500;
-  box-shadow: var(--card-shadow);
-  transition: background 0.2s, box-shadow 0.2s;
+  font-weight: 600;
+  box-shadow: none;
+  transition: all 0.2s ease;
+  width: 100%;
 }
-form.login button:hover {
-  background: var(--primary);
+form.login button:disabled,
+form.signup button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 

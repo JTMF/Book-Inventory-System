@@ -69,51 +69,61 @@ const Reports = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h3 className="font-semibold text-emerald-600 mb-3">Reports</h3>
+    <div className="bg-white p-4 rounded shadow" style={{ maxWidth: "100%" }}>
+      <h3 style={{ marginTop: 0, marginBottom: "16px", fontSize: "18px", fontWeight: 600, color: "#059669" }}>Reports</h3>
       <button
         onClick={downloadCSV}
-        className="bg-emerald-500 text-white px-3 py-1 rounded mb-3"
+        style={{
+          backgroundColor: "#059669",
+          color: "#fff",
+          padding: "10px 16px",
+          borderRadius: "var(--border-radius)",
+          border: "none",
+          cursor: "pointer",
+          marginBottom: "24px",
+          fontWeight: 500,
+          fontSize: "14px"
+        }}
       >
         Download CSV
       </button>
 
-      <table className="w-full text-sm">
+      <table className="w-full text-sm" style={{ marginTop: "24px" }}>
         <thead>
           <tr className="bg-gray-100">
-            <th>Type</th>
-            <th>Book Name</th>
-            <th>Qty</th>
-            <th>Date</th>
-            <th>From Location</th>
-            <th>To Location</th>
-            <th>Notes</th>
-            <th>Record Type</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Type</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Book Name</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Qty</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>From Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
           </tr>
         </thead>
         <tbody>
           {transactions.map(t => (
-            <tr key={t._id}>
-              <td>{t.type}</td>
-              <td>{t.item_name}</td>
-              <td>{t.qty}</td>
-              <td>{new Date(t.date).toLocaleDateString()}</td>
-              <td>{t.from_location || "-"}</td>
-              <td>{t.to_location || "-"}</td>
-              <td>{t.notes || "-"}</td>
-              <td>Transaction</td>
+            <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+              <td style={{ padding: "12px" }}>{t.type}</td>
+              <td style={{ padding: "12px" }}>{t.item_name}</td>
+              <td style={{ padding: "12px" }}>{t.qty}</td>
+              <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
+              <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
+              <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
+              <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
+              <td style={{ padding: "12px" }}>Transaction</td>
             </tr>
           ))}
           {stockTakes.map(s => (
-            <tr key={s._id}>
-              <td>-</td>
-              <td>{s.item_name}</td>
-              <td>{s.qty}</td>
-              <td>{new Date(s.createdAt).toLocaleDateString()}</td>
-              <td>{s.location || "-"}</td>
-              <td>-</td>
-              <td>{s.notes || "-"}</td>
-              <td>Stock Take</td>
+            <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>{s.item_name}</td>
+              <td style={{ padding: "12px" }}>{s.qty}</td>
+              <td style={{ padding: "12px" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
+              <td style={{ padding: "12px" }}>{s.location || "-"}</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>{s.notes || "-"}</td>
+              <td style={{ padding: "12px" }}>Stock Take</td>
             </tr>
           ))}
         </tbody>

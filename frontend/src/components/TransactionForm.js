@@ -57,40 +57,53 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow">
-      <h3>{editingTransaction ? "Edit Transaction" : "Add Transaction"}</h3>
+    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow" style={{ maxWidth: "100%" }}>
+      <h3 style={{ marginTop: 0, marginBottom: "24px", fontSize: "18px", fontWeight: 600 }}>
+        {editingTransaction ? "Edit Transaction" : "Add Transaction"}
+      </h3>
 
-      <label>Type:</label>
-      <select value={type} onChange={(e) => setType(e.target.value)}>
-        <option value="inbound">Inbound</option>
-        <option value="outbound">Outbound</option>
-        <option value="movement">Movement</option>
-      </select>
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Type:</label>
+        <select value={type} onChange={(e) => setType(e.target.value)} style={{ marginBottom: 0, marginTop: "12px" }}>
+          <option value="inbound">Inbound</option>
+          <option value="outbound">Outbound</option>
+          <option value="movement">Movement</option>
+        </select>
+      </div>
 
-      <label>Book Name:</label>
-      <input
-        type="text"
-        value={item_name}
-        onChange={(e) => setItemName(e.target.value)}
-        required
-      />
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Book Name:</label>
+        <input
+          type="text"
+          value={item_name}
+          onChange={(e) => setItemName(e.target.value)}
+          required
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <label>Quantity:</label>
-      <input
-        type="number"
-        value={qty}
-        onChange={(e) => setQty(e.target.value)}
-        required
-      />
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Quantity:</label>
+        <input
+          type="number"
+          value={qty}
+          onChange={(e) => setQty(e.target.value)}
+          required
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <label>Notes:</label>
-      <input
-        type="text"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-      />
+      <div style={{ marginBottom: "24px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Notes:</label>
+        <input
+          type="text"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <button className="bg-green-500 text-white px-4 py-2 mt-2">
+      <button className="bg-green-500 text-white px-4 py-2" style={{ marginBottom: "16px" }}>
         {editingTransaction ? "Update" : "Save"}
       </button>
 

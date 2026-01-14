@@ -11,6 +11,7 @@ import Signup from "./pages/Signup"
 import TransactionPage from "./pages/TransactionPage"
 import StockTakePage from "./pages/StockTakePage"
 import ReportsPage from "./pages/ReportsPage"
+import UserManagementPage from "./pages/UserManagementPage"
 
 function AppContent() {
   const { user } = useAuthContext()
@@ -24,6 +25,7 @@ function AppContent() {
           <Route path="/transaction" element={user ? <TransactionPage /> : <Navigate to="/login" />} />
           <Route path="/stocktake" element={user ? <StockTakePage /> : <Navigate to="/login" />} />
           <Route path="/reports" element={user ? <ReportsPage /> : <Navigate to="/login" />} />
+          <Route path="/users" element={user ? <UserManagementPage /> : <Navigate to="/login" />} />
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
           <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
         </Routes>

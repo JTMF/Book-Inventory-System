@@ -63,24 +63,51 @@ const StockTakeForm = ({ editingStockTake, setEditingStockTake }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow mt-4">
-      <h3 className="font-semibold mb-2">
+    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow mt-4" style={{ maxWidth: "100%" }}>
+      <h3 style={{ marginTop: 0, marginBottom: "24px", fontSize: "18px", fontWeight: 600 }}>
         {editingStockTake ? "Edit Stock Take" : "Add Stock Take"}
       </h3>
 
-      <label>Book Name:</label>
-      <input value={item_name} onChange={(e) => setItemName(e.target.value)} required />
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Book Name:</label>
+        <input 
+          value={item_name} 
+          onChange={(e) => setItemName(e.target.value)} 
+          required 
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <label>Quantity:</label>
-      <input type="number" value={qty} onChange={(e) => setQty(e.target.value)} required />
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Quantity:</label>
+        <input 
+          type="number" 
+          value={qty} 
+          onChange={(e) => setQty(e.target.value)} 
+          required 
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <label>Location:</label>
-      <input value={location} onChange={(e) => setLocation(e.target.value)} />
+      <div style={{ marginBottom: "20px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Location:</label>
+        <input 
+          value={location} 
+          onChange={(e) => setLocation(e.target.value)} 
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <label>Notes:</label>
-      <input value={notes} onChange={(e) => setNotes(e.target.value)} />
+      <div style={{ marginBottom: "24px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Notes:</label>
+        <input 
+          value={notes} 
+          onChange={(e) => setNotes(e.target.value)} 
+          style={{ marginBottom: 0, marginTop: "12px" }}
+        />
+      </div>
 
-      <button className="bg-green-500 text-white px-4 py-2 mt-2">
+      <button className="bg-green-500 text-white px-4 py-2" style={{ marginBottom: "16px" }}>
         {editingStockTake ? "Update" : "Save"}
       </button>
 

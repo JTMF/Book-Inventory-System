@@ -1,7 +1,11 @@
 import Reports from "../components/Reports"
 
 const ReportsPage = () => (
-    <div className="mt-5">
+    <div style={{
+      maxWidth: 1400,
+      margin: "0 auto",
+      padding: "24px"
+    }}>
         <Reports />
     </div>
 )
