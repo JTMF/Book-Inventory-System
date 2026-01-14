@@ -9,6 +9,9 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
   const [type, setType] = useState("inbound");
   const [item_name, setItemName] = useState("");
   const [qty, setQty] = useState("");
+  const [location, setLocation] = useState("");
+  const [from_location, setFromLocation] = useState("");
+  const [to_location, setToLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState(null);
 
@@ -17,6 +20,9 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
       setType(editingTransaction.type);
       setItemName(editingTransaction.item_name);
       setQty(editingTransaction.qty);
+      setLocation(editingTransaction.from_location || editingTransaction.to_location || "");
+      setFromLocation(editingTransaction.from_location || "");
+      setToLocation(editingTransaction.to_location || "");
       setNotes(editingTransaction.notes);
     }
   }, [editingTransaction]);
@@ -25,7 +31,16 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
     e.preventDefault();
     if (!user) return setError("You must be logged in");
 
-    const transactionData = { type, item_name, qty, notes };
+    let transactionData = { type, item_name, qty, notes };
+
+    // Add location fields based on transaction type
+    if (type === "movement") {
+      transactionData.from_location = from_location;
+      transactionData.to_location = to_location;
+    } else {
+      transactionData.from_location = type === "inbound" ? "" : location;
+      transactionData.to_location = type === "outbound" ? "" : location;
+    }
 
     const url = editingTransaction 
       ? `${process.env.REACT_APP_API_URL}/api/transactions/${editingTransaction._id}`
@@ -51,6 +66,9 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
     setType("inbound");
     setItemName("");
     setQty("");
+    setLocation("");
+    setFromLocation("");
+    setToLocation("");
     setNotes("");
     setError(null);
     if (editingTransaction) setEditingTransaction(null);
@@ -92,6 +110,45 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
           style={{ marginBottom: 0, marginTop: "12px" }}
         />
       </div>
+
+      {type === "movement" ? (
+        <>
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>From Location:</label>
+            <input
+              type="text"
+              value={from_location}
+              onChange={(e) => setFromLocation(e.target.value)}
+              required
+              style={{ marginBottom: 0, marginTop: "12px" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>To Location:</label>
+            <input
+              type="text"
+              value={to_location}
+              onChange={(e) => setToLocation(e.target.value)}
+              required
+              style={{ marginBottom: 0, marginTop: "12px" }}
+            />
+          </div>
+        </>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>
+            {type === "inbound" ? "Inbound Location:" : "Outbound Location:"}
+          </label>
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            required
+            style={{ marginBottom: 0, marginTop: "12px" }}
+          />
+        </div>
+      )}
 
       <div style={{ marginBottom: "24px" }}>
         <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>Notes:</label>

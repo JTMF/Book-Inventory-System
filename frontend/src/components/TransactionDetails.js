@@ -20,6 +20,14 @@ const TransactionDetails = ({ transaction }) => {
       <h4 className="text-emerald-600">{transaction.type.toUpperCase()}</h4>
       <p>Book Name: {transaction.item_name}</p>
       <p>Quantity: {transaction.qty}</p>
+      {transaction.type === "movement" ? (
+        <>
+          <p>From Location: {transaction.from_location || "-"}</p>
+          <p>To Location: {transaction.to_location || "-"}</p>
+        </>
+      ) : (
+        <p>Location: {transaction.type === "inbound" ? transaction.to_location : transaction.from_location || "-"}</p>
+      )}
       <p>Date: {new Date(transaction.date).toLocaleDateString()}</p>
       <p>Notes: {transaction.notes || "-"}</p>
       <span onClick={handleClick} className="absolute top-2 right-3 cursor-pointer text-red-500">✖</span>
