@@ -7,16 +7,16 @@ const {
     updateUserRole,
     deleteUser
 } = require("../controllers/userController")
-const requireAdmin = require("../middleware/requireAdmin")
+const requireSupervisor = require("../middleware/requireSupervisor")
 const router = express.Router()
 
 router.post("/signup", signupUser)
 router.post("/login", loginUser)
 
-// Admin routes
-router.get("/all", requireAdmin, getAllUsers)
-router.get("/search", requireAdmin, searchUsers)
-router.put("/:userId", requireAdmin, updateUserRole)
-router.delete("/:userId", requireAdmin, deleteUser)
+// Supervisor routes
+router.get("/all", requireSupervisor, getAllUsers)
+router.get("/search", requireSupervisor, searchUsers)
+router.put("/:userId", requireSupervisor, updateUserRole)
+router.delete("/:userId", requireSupervisor, deleteUser)
 
 module.exports = router

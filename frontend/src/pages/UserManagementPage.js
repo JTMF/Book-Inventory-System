@@ -37,7 +37,7 @@ const UserManagementPage = () => {
             }
         }
 
-        if (user && user.role === "admin") {
+        if (user && user.role === "supervisor") {
             fetchUsers()
         }
     }, [user])
@@ -109,11 +109,11 @@ const UserManagementPage = () => {
         }
     }
 
-    if (!user || user.role !== "admin") {
+    if (!user || user.role !== "supervisor") {
         return (
             <div style={{ padding: "20px", textAlign: "center", color: "red" }}>
                 <h2>Access Denied</h2>
-                <p>You must be an admin to access this page.</p>
+                <p>You must be a supervisor to access this page.</p>
             </div>
         )
     }
@@ -202,11 +202,10 @@ const UserManagementPage = () => {
                                                     >
                                                         <option value="operator">Operator</option>
                                                         <option value="supervisor">Supervisor</option>
-                                                        <option value="admin">Admin</option>
                                                     </select>
                                                 ) : (
                                                     <span style={{
-                                                        backgroundColor: userItem.role === "admin" ? "#c33" : userItem.role === "supervisor" ? "#f39c12" : "#27ae60",
+                                                        backgroundColor: userItem.role === "supervisor" ? "#f39c12" : "#27ae60",
                                                         color: "#fff",
                                                         padding: "4px 8px",
                                                         borderRadius: "4px",

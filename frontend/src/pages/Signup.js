@@ -44,7 +44,6 @@ const Signup = () => {
             >
                 <option value="operator">Operator</option>
                 <option value="supervisor">Supervisor</option>
-                <option value="admin">Admin</option>
             </select>
 
             <button 

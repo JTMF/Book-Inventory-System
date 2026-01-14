@@ -27,7 +27,7 @@ const signupUser = async (req, res) => {
     }
 }
 
-// Get all users (admin only)
+// Get all users (supervisor only)
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}).select("-password")
@@ -37,7 +37,7 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-// Search users (admin only)
+// Search users (supervisor only)
 const searchUsers = async (req, res) => {
     try {
         const { query } = req.query
@@ -59,7 +59,7 @@ const searchUsers = async (req, res) => {
     }
 }
 
-// Update user role (admin only)
+// Update user role (supervisor only)
 const updateUserRole = async (req, res) => {
     try {
         const { userId } = req.params
@@ -69,7 +69,7 @@ const updateUserRole = async (req, res) => {
             return res.status(400).json({ error: "Role is required" })
         }
         
-        if (!["operator", "supervisor", "admin"].includes(role)) {
+        if (!["operator", "supervisor"].includes(role)) {
             return res.status(400).json({ error: "Invalid role" })
         }
         
@@ -80,7 +80,7 @@ const updateUserRole = async (req, res) => {
     }
 }
 
-// Delete user (admin only)
+// Delete user (supervisor only)
 const deleteUser = async (req, res) => {
     try {
         const { userId } = req.params
