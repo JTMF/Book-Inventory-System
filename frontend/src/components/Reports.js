@@ -133,8 +133,8 @@ const Reports = () => {
                 <td style={{ padding: "12px" }}>{t.item_name}</td>
                 <td style={{ padding: "12px" }}>{t.qty}</td>
                 <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
-                <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
-                <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
+                <td style={{ padding: "12px" }}>{t.from_location}</td>
+                <td style={{ padding: "12px" }}>{t.to_location}</td>
                 <td style={{ padding: "12px" }}>{inboundLoc}</td>
                 <td style={{ padding: "12px" }}>{outboundLoc}</td>
                 <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
