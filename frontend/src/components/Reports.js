@@ -31,7 +31,7 @@ const Reports = () => {
   const downloadCSV = () => {
     // Combine Transactions and StockTakes
     const csvRows = [
-      ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Notes", "Record Type"]
+      ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Inbound Location", "Outbound Location", "Notes", "Record Type"]
     ];
 
     transactions.forEach(t => {
@@ -42,6 +42,8 @@ const Reports = () => {
         new Date(t.date).toLocaleDateString(),
         t.from_location || "-",
         t.to_location || "-",
+        t.type === "inbound" ? (t.to_location || "-") : "-",
+        t.type === "outbound" ? (t.from_location || "-") : "-",
         t.notes || "-",
         "Transaction"
       ]);
@@ -53,6 +55,8 @@ const Reports = () => {
         s.item_name,
         s.qty,
         new Date(s.createdAt).toLocaleDateString(),
+        "-",
+        "-",
         s.location || "-",
         "-",
         s.notes || "-",
@@ -97,6 +101,8 @@ const Reports = () => {
             <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
             <th style={{ padding: "12px", textAlign: "left" }}>From Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Inbound Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Outbound Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
           </tr>
@@ -110,6 +116,8 @@ const Reports = () => {
               <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
               <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
               <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
+              <td style={{ padding: "12px" }}>{t.type === "inbound" ? (t.to_location || "-") : "-"}</td>
+              <td style={{ padding: "12px" }}>{t.type === "outbound" ? (t.from_location || "-") : "-"}</td>
               <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
               <td style={{ padding: "12px" }}>Transaction</td>
             </tr>
@@ -120,6 +128,8 @@ const Reports = () => {
               <td style={{ padding: "12px" }}>{s.item_name}</td>
               <td style={{ padding: "12px" }}>{s.qty}</td>
               <td style={{ padding: "12px" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>-</td>
               <td style={{ padding: "12px" }}>{s.location || "-"}</td>
               <td style={{ padding: "12px" }}>-</td>
               <td style={{ padding: "12px" }}>{s.notes || "-"}</td>
