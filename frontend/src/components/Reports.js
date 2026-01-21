@@ -31,7 +31,7 @@ const Reports = () => {
   const downloadCSV = () => {
     // Combine Transactions and StockTakes
     const csvRows = [
-      ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Inbound Location", "Outbound Location", "Notes", "Record Type"]
+      ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Inbound Location", "Outbound Location", "Location", "Notes", "Record Type"]
     ];
 
     transactions.forEach(t => {
@@ -65,14 +65,15 @@ const Reports = () => {
 
     stockTakes.forEach(s => {
       csvRows.push([
-        "-",
+        "Stock Take",
         s.item_name,
         s.qty,
         new Date(s.createdAt).toLocaleDateString(),
         "-",
         "-",
-        s.location || "-",
         "-",
+        "-",
+        s.location || "-",
         s.notes || "-",
         "Stock Take"
       ]);
@@ -117,6 +118,7 @@ const Reports = () => {
             <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Inbound Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Outbound Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
           </tr>
@@ -154,14 +156,15 @@ const Reports = () => {
           })}
           {stockTakes.map(s => (
             <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>Stock Take</td>
               <td style={{ padding: "12px" }}>{s.item_name}</td>
               <td style={{ padding: "12px" }}>{s.qty}</td>
               <td style={{ padding: "12px" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
               <td style={{ padding: "12px" }}>-</td>
               <td style={{ padding: "12px" }}>-</td>
-              <td style={{ padding: "12px" }}>{s.location || "-"}</td>
               <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>{s.location || "-"}</td>
               <td style={{ padding: "12px" }}>{s.notes || "-"}</td>
               <td style={{ padding: "12px" }}>Stock Take</td>
             </tr>
