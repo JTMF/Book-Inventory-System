@@ -1,9 +1,8 @@
 const StockTake = require("../models/stockTakeModel");
 
 const getStockTakes = async (req, res) => {
-  const user_id = req.user._id;
   try {
-    const stockTakes = await StockTake.find({ user_id }).sort({ createdAt: -1 });
+    const stockTakes = await StockTake.find().sort({ createdAt: -1 });
     res.status(200).json(stockTakes);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch stock takes" });

@@ -2,9 +2,8 @@ const Transaction = require("../models/transactionModel");
 
 // Get transactions
 const getTransactions = async (req, res) => {
-  const user_id = req.user._id;
   try {
-    const transactions = await Transaction.find({ user_id }).sort({ date: -1 });
+    const transactions = await Transaction.find().sort({ date: -1 });
     res.status(200).json(transactions);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch transactions" });
