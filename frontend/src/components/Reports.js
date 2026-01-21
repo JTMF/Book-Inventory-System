@@ -35,6 +35,15 @@ const Reports = () => {
     ];
 
     transactions.forEach(t => {
+      let inboundLoc = "-";
+      let outboundLoc = "-";
+      
+      if (t.type === "inbound") {
+        inboundLoc = t.to_location || "-";
+      } else if (t.type === "outbound") {
+        outboundLoc = t.from_location || "-";
+      }
+
       csvRows.push([
         t.type,
         t.item_name,
@@ -42,8 +51,8 @@ const Reports = () => {
         new Date(t.date).toLocaleDateString(),
         t.from_location || "-",
         t.to_location || "-",
-        t.type === "inbound" ? (t.to_location || "-") : "-",
-        t.type === "outbound" ? (t.from_location || "-") : "-",
+        inboundLoc,
+        outboundLoc,
         t.notes || "-",
         "Transaction"
       ]);
@@ -108,20 +117,31 @@ const Reports = () => {
           </tr>
         </thead>
         <tbody>
-          {transactions.map(t => (
-            <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-              <td style={{ padding: "12px" }}>{t.type}</td>
-              <td style={{ padding: "12px" }}>{t.item_name}</td>
-              <td style={{ padding: "12px" }}>{t.qty}</td>
-              <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
-              <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
-              <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
-              <td style={{ padding: "12px" }}>{t.type === "inbound" ? (t.to_location || "-") : "-"}</td>
-              <td style={{ padding: "12px" }}>{t.type === "outbound" ? (t.from_location || "-") : "-"}</td>
-              <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
-              <td style={{ padding: "12px" }}>Transaction</td>
-            </tr>
-          ))}
+          {transactions.map(t => {
+            let inboundLoc = "-";
+            let outboundLoc = "-";
+            
+            if (t.type === "inbound") {
+              inboundLoc = t.to_location || "-";
+            } else if (t.type === "outbound") {
+              outboundLoc = t.from_location || "-";
+            }
+
+            return (
+              <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+                <td style={{ padding: "12px" }}>{t.type}</td>
+                <td style={{ padding: "12px" }}>{t.item_name}</td>
+                <td style={{ padding: "12px" }}>{t.qty}</td>
+                <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
+                <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
+                <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
+                <td style={{ padding: "12px" }}>{inboundLoc}</td>
+                <td style={{ padding: "12px" }}>{outboundLoc}</td>
+                <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
+                <td style={{ padding: "12px" }}>Transaction</td>
+              </tr>
+            );
+          })}
           {stockTakes.map(s => (
             <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
               <td style={{ padding: "12px" }}>-</td>
