@@ -50,7 +50,7 @@ const Reports = () => {
       }
 
       csvRows.push([
-        t.type,
+        t.type.charAt(0).toUpperCase() + t.type.slice(1),
         t.item_name,
         t.qty,
         new Date(t.date).toLocaleDateString(),
@@ -141,7 +141,7 @@ const Reports = () => {
 
             return (
               <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                <td style={{ padding: "12px" }}>{t.type}</td>
+                <td style={{ padding: "12px" }}>{t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
                 <td style={{ padding: "12px" }}>{t.item_name}</td>
                 <td style={{ padding: "12px" }}>{t.qty}</td>
                 <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
