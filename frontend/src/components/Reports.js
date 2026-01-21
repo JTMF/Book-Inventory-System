@@ -31,7 +31,7 @@ const Reports = () => {
   const downloadCSV = () => {
     // Combine Transactions and StockTakes
     const csvRows = [
-      ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Notes", "Record Type"]
+      ["Type", "Book Name", "Quantity", "Date", "Inbound Location", "Outbound Location", "Notes", "Record Type"]
     ];
 
     transactions.forEach(t => {
@@ -40,8 +40,8 @@ const Reports = () => {
         t.item_name,
         t.qty,
         new Date(t.date).toLocaleDateString(),
-        t.from_location || "-",
-        t.to_location || "-",
+        t.type === "inbound" ? (t.to_location || "-") : (t.type === "movement" ? (t.from_location || "-") : "-"),
+        t.type === "outbound" ? (t.from_location || "-") : (t.type === "movement" ? (t.to_location || "-") : "-"),
         t.notes || "-",
         "Transaction"
       ]);
@@ -95,8 +95,8 @@ const Reports = () => {
             <th style={{ padding: "12px", textAlign: "left" }}>Book Name</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Qty</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>From Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Inbound Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Outbound Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
           </tr>
@@ -108,8 +108,12 @@ const Reports = () => {
               <td style={{ padding: "12px" }}>{t.item_name}</td>
               <td style={{ padding: "12px" }}>{t.qty}</td>
               <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
-              <td style={{ padding: "12px" }}>{t.from_location || "-"}</td>
-              <td style={{ padding: "12px" }}>{t.to_location || "-"}</td>
+              <td style={{ padding: "12px" }}>
+                {t.type === "inbound" ? (t.to_location || "-") : (t.type === "movement" ? (t.from_location || "-") : "-")}
+              </td>
+              <td style={{ padding: "12px" }}>
+                {t.type === "outbound" ? (t.from_location || "-") : (t.type === "movement" ? (t.to_location || "-") : "-")}
+              </td>
               <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
               <td style={{ padding: "12px" }}>Transaction</td>
             </tr>
