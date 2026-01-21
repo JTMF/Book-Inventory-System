@@ -96,4 +96,3 @@ const deleteTransaction = async (req, res) => {
 };
 
 module.exports = { getTransactions, createTransaction, updateTransaction, deleteTransaction };
-module.exports = { getTransactions, createTransaction, deleteTransaction };
