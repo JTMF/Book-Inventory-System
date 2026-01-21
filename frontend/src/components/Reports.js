@@ -149,6 +149,7 @@ const Reports = () => {
                 <td style={{ padding: "12px" }}>{toLoc}</td>
                 <td style={{ padding: "12px" }}>{inboundLoc}</td>
                 <td style={{ padding: "12px" }}>{outboundLoc}</td>
+                <td style={{ padding: "12px" }}>-</td>
                 <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
                 <td style={{ padding: "12px" }}>Transaction</td>
               </tr>
