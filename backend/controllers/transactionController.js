@@ -37,13 +37,50 @@ const createTransaction = async (req, res) => {
   }
 };
 
+// Update transaction
+const updateTransaction = async (req, res) => {
+  const { id } = req.params;
+  const user_id = req.user._id;
+  const userRole = req.user.role;
+  const { type, item_name, qty, from_location, to_location, date, notes } = req.body;
+
+  if (!type || !item_name || !qty) {
+    return res.status(400).json({ error: "Type, book name, and quantity are required" });
+  }
+
+  try {
+    // Supervisors can update any transaction, others can only update their own
+    const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
+    const transaction = await Transaction.findOneAndUpdate(
+      query,
+      {
+        type,
+        item_name,
+        qty,
+        from_location: from_location || "",
+        to_location: to_location || "",
+        date: date || new Date(),
+        notes: notes || "",
+      },
+      { new: true }
+    );
+    if (!transaction) return res.status(404).json({ error: "Transaction not found" });
+    res.status(200).json(transaction);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Delete transaction
 const deleteTransaction = async (req, res) => {
   const { id } = req.params;
   const user_id = req.user._id;
+  const userRole = req.user.role;
 
   try {
-    const transaction = await Transaction.findOneAndDelete({ _id: id, user_id });
+    // Supervisors can delete any transaction, others can only delete their own
+    const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
+    const transaction = await Transaction.findOneAndDelete(query);
     if (!transaction) return res.status(404).json({ error: "Transaction not found" });
     res.status(200).json(transaction);
   } catch (error) {
@@ -51,4 +88,5 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
+module.exports = { getTransactions, createTransaction, updateTransaction, deleteTransaction };
 module.exports = { getTransactions, createTransaction, deleteTransaction };

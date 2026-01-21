@@ -1,7 +1,7 @@
 import { useTransactionContext } from "../hooks/useTransactionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const TransactionDetails = ({ transaction }) => {
+const TransactionDetails = ({ transaction, setEditingTransaction }) => {
   const { dispatch } = useTransactionContext();
   const { user } = useAuthContext();
 
@@ -14,6 +14,10 @@ const TransactionDetails = ({ transaction }) => {
     const json = await res.json();
     if (res.ok) dispatch({ type: "DELETE_TRANSACTION", payload: json });
   };
+
+  // Check if user is supervisor or owner
+  const canEdit = user && (user.role === "supervisor" || user._id === transaction.user_id);
+  const canDelete = user && (user.role === "supervisor" || user._id === transaction.user_id);
 
   return (
     <div className="bg-white rounded p-3 shadow-sm mb-2 relative">
@@ -30,7 +34,25 @@ const TransactionDetails = ({ transaction }) => {
       )}
       <p>Date: {new Date(transaction.date).toLocaleDateString()}</p>
       <p>Notes: {transaction.notes || "-"}</p>
-      <span onClick={handleClick} className="absolute top-2 right-3 cursor-pointer text-red-500">✖</span>
+      
+      {(canEdit || canDelete) && (
+        <div className="absolute top-2 right-3 flex gap-2">
+          {canEdit && (
+            <span 
+              onClick={() => setEditingTransaction(transaction)} 
+              className="cursor-pointer text-green-500" 
+              title="Edit"
+            >
+              ✎
+            </span>
+          )}
+          {canDelete && (
+            <span onClick={handleClick} className="cursor-pointer text-red-500" title="Delete">
+              ✖
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

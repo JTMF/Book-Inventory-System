@@ -35,9 +35,12 @@ const createStockTake = async (req, res) => {
 const deleteStockTake = async (req, res) => {
   const { id } = req.params;
   const user_id = req.user._id;
+  const userRole = req.user.role;
 
   try {
-    const stockTake = await StockTake.findOneAndDelete({ _id: id, user_id });
+    // Supervisors can delete any stock take, others can only delete their own
+    const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
+    const stockTake = await StockTake.findOneAndDelete(query);
     if (!stockTake) return res.status(404).json({ error: "Stock take not found" });
     res.status(200).json(stockTake);
   } catch (error) {
