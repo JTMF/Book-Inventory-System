@@ -46,10 +46,7 @@ const Dashboard = () => {
   }, [dispatchTransactions, dispatchStockTakes, user])
 
   // Calculate KPIs
-  const totalTransactions = transactions?.length || 0
   const totalStockTakes = stockTakes?.length || 0
-  const totalValue = transactions?.reduce((sum, t) => sum + (t.quantity * t.pricePerUnit || 0), 0) || 0
-  const outstandingItems = stockTakes?.filter(s => s.status === 'Pending')?.length || 0
 
   // Stock Accuracy % - Completed vs Total stock takes
   const completedStockTakes = stockTakes?.filter(s => s.status === 'Completed')?.length || 0
