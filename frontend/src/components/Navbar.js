@@ -104,8 +104,10 @@ const Navbar = () => {
                 <nav style={{ 
                     display: "flex", 
                     alignItems: "center", 
-                    gap: "8px",
-                    marginLeft: "auto"
+                    gap: "4px",
+                    marginLeft: "auto",
+                    flexWrap: "nowrap",
+                    justifyContent: "flex-end"
                 }}>
                     {user && (
                         <>
@@ -114,6 +116,8 @@ const Navbar = () => {
                                 alignItems: "center",
                                 gap: "16px",
                                 paddingRight: "16px",
+                                marginLeft: "24px",
+                                marginRight: "24px",
                                 borderRight: "2px solid rgba(255,255,255,0.2)"
                             }}>
                                 <span style={{ 

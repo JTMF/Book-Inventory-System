@@ -19,7 +19,7 @@ function AppContent() {
   return (
     <BrowserRouter>
       <Navbar />
-      <div className="p-4 max-w-6xl mx-auto">
+      <div className="pages">
         <Routes>
           <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/transaction" element={user ? <TransactionPage /> : <Navigate to="/login" />} />

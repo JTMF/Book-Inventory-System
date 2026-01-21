@@ -82,8 +82,22 @@ body {
 
 .pages {
   max-width: 1400px;
-  padding: 32px 24px;
+  padding: 32px 60px;
   margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Responsive spacing for smaller screens */
+@media (max-width: 1200px) {
+  .pages {
+    padding: 32px 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .pages {
+    padding: 32px 20px;
+  }
 }
 
 
