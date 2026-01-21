@@ -37,11 +37,16 @@ const Reports = () => {
     transactions.forEach(t => {
       let inboundLoc = "-";
       let outboundLoc = "-";
+      let fromLoc = "-";
+      let toLoc = "-";
       
       if (t.type === "inbound") {
         inboundLoc = t.to_location || "-";
       } else if (t.type === "outbound") {
         outboundLoc = t.from_location || "-";
+      } else if (t.type === "movement") {
+        fromLoc = t.from_location || "-";
+        toLoc = t.to_location || "-";
       }
 
       csvRows.push([
@@ -49,8 +54,8 @@ const Reports = () => {
         t.item_name,
         t.qty,
         new Date(t.date).toLocaleDateString(),
-        t.from_location || "-",
-        t.to_location || "-",
+        fromLoc,
+        toLoc,
         inboundLoc,
         outboundLoc,
         t.notes || "-",
@@ -120,11 +125,16 @@ const Reports = () => {
           {transactions.map(t => {
             let inboundLoc = "-";
             let outboundLoc = "-";
+            let fromLoc = "-";
+            let toLoc = "-";
             
             if (t.type === "inbound") {
               inboundLoc = t.to_location || "-";
             } else if (t.type === "outbound") {
               outboundLoc = t.from_location || "-";
+            } else if (t.type === "movement") {
+              fromLoc = t.from_location || "-";
+              toLoc = t.to_location || "-";
             }
 
             return (
@@ -133,8 +143,8 @@ const Reports = () => {
                 <td style={{ padding: "12px" }}>{t.item_name}</td>
                 <td style={{ padding: "12px" }}>{t.qty}</td>
                 <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
-                <td style={{ padding: "12px" }}>{t.from_location}</td>
-                <td style={{ padding: "12px" }}>{t.to_location}</td>
+                <td style={{ padding: "12px" }}>{fromLoc}</td>
+                <td style={{ padding: "12px" }}>{toLoc}</td>
                 <td style={{ padding: "12px" }}>{inboundLoc}</td>
                 <td style={{ padding: "12px" }}>{outboundLoc}</td>
                 <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
