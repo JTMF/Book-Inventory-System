@@ -77,13 +77,20 @@ const deleteTransaction = async (req, res) => {
   const user_id = req.user._id;
   const userRole = req.user.role;
 
+  console.log(`Delete attempt - ID: ${id}, User: ${user_id}, Role: ${userRole}`);
+
   try {
     // Supervisors can delete any transaction, others can only delete their own
     const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
+    console.log("Query:", query);
     const transaction = await Transaction.findOneAndDelete(query);
-    if (!transaction) return res.status(404).json({ error: "Transaction not found" });
+    if (!transaction) {
+      console.log("Transaction not found with query:", query);
+      return res.status(404).json({ error: "Transaction not found" });
+    }
     res.status(200).json(transaction);
   } catch (error) {
+    console.error("Delete error:", error);
     res.status(400).json({ error: "Failed to delete transaction" });
   }
 };

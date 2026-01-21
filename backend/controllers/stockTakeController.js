@@ -37,13 +37,20 @@ const deleteStockTake = async (req, res) => {
   const user_id = req.user._id;
   const userRole = req.user.role;
 
+  console.log(`Delete attempt - ID: ${id}, User: ${user_id}, Role: ${userRole}`);
+
   try {
     // Supervisors can delete any stock take, others can only delete their own
     const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
+    console.log("Query:", query);
     const stockTake = await StockTake.findOneAndDelete(query);
-    if (!stockTake) return res.status(404).json({ error: "Stock take not found" });
+    if (!stockTake) {
+      console.log("Stock take not found with query:", query);
+      return res.status(404).json({ error: "Stock take not found" });
+    }
     res.status(200).json(stockTake);
   } catch (error) {
+    console.error("Delete error:", error);
     res.status(400).json({ error: "Failed to delete stock take" });
   }
 };

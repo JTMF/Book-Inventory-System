@@ -7,12 +7,22 @@ const TransactionDetails = ({ transaction, setEditingTransaction }) => {
 
   const handleClick = async () => {
     if (!user) return;
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions/${transaction._id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${user.token}` },
-    });
-    const json = await res.json();
-    if (res.ok) dispatch({ type: "DELETE_TRANSACTION", payload: json });
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions/${transaction._id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      const json = await res.json();
+      if (res.ok) {
+        dispatch({ type: "DELETE_TRANSACTION", payload: json });
+      } else {
+        console.error("Delete failed:", json.error);
+        alert("Failed to delete: " + (json.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error deleting transaction");
+    }
   };
 
   // Check if user is supervisor or owner
