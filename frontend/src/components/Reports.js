@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import TransactionForm from "./TransactionForm";
+import StockTakeForm from "./StockTakeForm";
 
 const Reports = () => {
   const { user } = useAuthContext();
   const [transactions, setTransactions] = useState([]);
   const [stockTakes, setStockTakes] = useState([]);
+  const [editingTransaction, setEditingTransaction] = useState(null);
+  const [editingStockTake, setEditingStockTake] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +31,52 @@ const Reports = () => {
 
     fetchData();
   }, [user]);
+
+  // Handle transaction delete
+  const handleDeleteTransaction = async (id) => {
+    if (!user) return;
+    if (!window.confirm("Are you sure you want to delete this transaction?")) return;
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      if (res.ok) {
+        setTransactions(transactions.filter(t => t._id !== id));
+      } else {
+        const json = await res.json();
+        alert("Failed to delete: " + (json.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error deleting transaction");
+    }
+  };
+
+  // Handle stock take delete
+  const handleDeleteStockTake = async (id) => {
+    if (!user) return;
+    if (!window.confirm("Are you sure you want to delete this stock take?")) return;
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/stocktake/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      if (res.ok) {
+        setStockTakes(stockTakes.filter(s => s._id !== id));
+      } else {
+        const json = await res.json();
+        alert("Failed to delete: " + (json.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error deleting stock take");
+    }
+  };
 
   const downloadCSV = () => {
     // Combine Transactions and StockTakes
@@ -121,6 +171,7 @@ const Reports = () => {
             <th style={{ padding: "12px", textAlign: "left" }}>Location</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
             <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -152,6 +203,28 @@ const Reports = () => {
                 <td style={{ padding: "12px" }}>-</td>
                 <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
                 <td style={{ padding: "12px" }}>Transaction</td>
+                <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                  {user && (user.role === "supervisor" || user._id === t.user_id) && (
+                    <>
+                      <span 
+                        onClick={() => setEditingTransaction(t)} 
+                        className="cursor-pointer text-green-500" 
+                        title="Edit"
+                        style={{ cursor: "pointer" }}
+                      >
+                        ✎
+                      </span>
+                      <span 
+                        onClick={() => handleDeleteTransaction(t._id)} 
+                        className="cursor-pointer text-red-500" 
+                        title="Delete"
+                        style={{ cursor: "pointer" }}
+                      >
+                        ✖
+                      </span>
+                    </>
+                  )}
+                </td>
               </tr>
             );
           })}
@@ -168,10 +241,52 @@ const Reports = () => {
               <td style={{ padding: "12px" }}>{s.location || "-"}</td>
               <td style={{ padding: "12px" }}>{s.notes || "-"}</td>
               <td style={{ padding: "12px" }}>Stock Take</td>
+              <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                {user && (user.role === "supervisor" || user._id === s.user_id) && (
+                  <>
+                    <span 
+                      onClick={() => setEditingStockTake(s)} 
+                      className="cursor-pointer text-green-500" 
+                      title="Edit"
+                      style={{ cursor: "pointer" }}
+                    >
+                      ✎
+                    </span>
+                    <span 
+                      onClick={() => handleDeleteStockTake(s._id)} 
+                      className="cursor-pointer text-red-500" 
+                      title="Delete"
+                      style={{ cursor: "pointer" }}
+                    >
+                      ✖
+                    </span>
+                  </>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {editingTransaction && (
+        <div style={{ marginTop: "32px", padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+          <h3 style={{ marginTop: 0, fontSize: "16px", fontWeight: 600 }}>Edit Transaction</h3>
+          <TransactionForm
+            editingTransaction={editingTransaction}
+            setEditingTransaction={setEditingTransaction}
+          />
+        </div>
+      )}
+
+      {editingStockTake && (
+        <div style={{ marginTop: "32px", padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+          <h3 style={{ marginTop: 0, fontSize: "16px", fontWeight: 600 }}>Edit Stock Take</h3>
+          <StockTakeForm
+            editingStockTake={editingStockTake}
+            setEditingStockTake={setEditingStockTake}
+          />
+        </div>
+      )}
     </div>
   );
 };

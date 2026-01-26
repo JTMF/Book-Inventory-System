@@ -17,7 +17,7 @@ const UserManagementPage = () => {
             try {
                 setLoading(true)
                 setError(null)
-                const response = await fetch("http://localhost:4000/api/user/all", {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/all`, {
                     headers: {
                         "Authorization": `Bearer ${user.token}`
                     }
@@ -61,7 +61,7 @@ const UserManagementPage = () => {
     // Handle update role
     const handleUpdateRole = async (userId, newRole) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/user/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${user.token}`,
@@ -91,7 +91,7 @@ const UserManagementPage = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:4000/api/user/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/${userId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${user.token}`

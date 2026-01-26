@@ -1,4 +1,4 @@
-import StockTakeForm from "../components/StockTakeForm"
+import StockTakeList from "../components/StockTakeList"
 
 const StockTakePage = () => (
     <div style={{
@@ -6,7 +6,7 @@ const StockTakePage = () => (
       margin: "0 auto",
       padding: "24px"
     }}>
-        <StockTakeForm />
+        <StockTakeList />
     </div>
 )
 
