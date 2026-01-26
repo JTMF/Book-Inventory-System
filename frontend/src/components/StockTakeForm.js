@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useStockTakeContext } from "../hooks/useStockTakeContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const StockTakeForm = ({ editingStockTake, setEditingStockTake }) => {
+const StockTakeForm = ({ editingStockTake, setEditingStockTake, onSuccess }) => {
   const { dispatch } = useStockTakeContext();
   const { user } = useAuthContext();
 
@@ -57,6 +57,11 @@ const StockTakeForm = ({ editingStockTake, setEditingStockTake }) => {
       setLocation("");
       setNotes("");
       setError(null);
+      
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess(json, !!editingStockTake);
+      }
     } catch (err) {
       setError(err.message);
     }

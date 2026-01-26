@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTransactionContext } from "../hooks/useTransactionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
+const TransactionForm = ({ editingTransaction, setEditingTransaction, onSuccess }) => {
   const { dispatch } = useTransactionContext();
   const { user } = useAuthContext();
 
@@ -72,6 +72,11 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
     setNotes("");
     setError(null);
     if (editingTransaction) setEditingTransaction(null);
+    
+    // Call onSuccess callback if provided
+    if (onSuccess) {
+      onSuccess(json, !!editingTransaction);
+    }
   };
 
   return (

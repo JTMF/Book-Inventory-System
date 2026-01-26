@@ -1,4 +1,4 @@
-import TransactionForm from "../components/TransactionForm"
+import TransactionList from "../components/TransactionList"
 
 const TransactionPage = () => {
   return (
@@ -7,7 +7,7 @@ const TransactionPage = () => {
       margin: "0 auto",
       padding: "24px"
     }}>
-      <TransactionForm />
+      <TransactionList />
     </div>
   )
 }

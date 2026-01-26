@@ -1,31 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
 import { useAuthContext } from "../hooks/useAuthContext";
+import TransactionForm from "./TransactionForm";
+import StockTakeForm from "./StockTakeForm";
 
 const Reports = () => {
   const { user } = useAuthContext();
   const [transactions, setTransactions] = useState([]);
   const [stockTakes, setStockTakes] = useState([]);
-  const [chartData, setChartData] = useState({
-    transactionTrend: [],
-    transactionTypes: [],
-    bookInventory: [],
-    locationInventory: []
-  });
+  const [editingTransaction, setEditingTransaction] = useState(null);
+  const [editingStockTake, setEditingStockTake] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,66 +32,51 @@ const Reports = () => {
     fetchData();
   }, [user]);
 
-  // Process data for charts
-  useEffect(() => {
-    // Transaction Type Chart (Inbound vs Outbound)
-    const inbound = transactions.filter(t => t.type === "inbound").length;
-    const outbound = transactions.filter(t => t.type === "outbound").length;
-    const movement = transactions.filter(t => t.type === "movement").length;
-    
-    const transactionTypes = [
-      { name: "Inbound", value: inbound, fill: "#10b981" },
-      { name: "Outbound", value: outbound, fill: "#ef4444" },
-      { name: "Movement", value: movement, fill: "#3b82f6" }
-    ];
+  // Handle transaction delete
+  const handleDeleteTransaction = async (id) => {
+    if (!user) return;
+    if (!window.confirm("Are you sure you want to delete this transaction?")) return;
 
-    // Book Inventory Chart
-    const bookInventory = stockTakes.map(s => ({
-      name: s.item_name.substring(0, 20),
-      quantity: s.qty,
-      fullName: s.item_name
-    }));
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
 
-    // Location Inventory Chart
-    const locationMap = {};
-    stockTakes.forEach(s => {
-      if (!locationMap[s.location]) {
-        locationMap[s.location] = 0;
+      if (res.ok) {
+        setTransactions(transactions.filter(t => t._id !== id));
+      } else {
+        const json = await res.json();
+        alert("Failed to delete: " + (json.error || "Unknown error"));
       }
-      locationMap[s.location] += s.qty;
-    });
-    const locationInventory = Object.entries(locationMap).map(([loc, qty]) => ({
-      name: loc || "Unknown",
-      quantity: qty
-    }));
-
-    // Transaction Trend (last 7 days)
-    const today = new Date();
-    const last7Days = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
-      last7Days.push(d.toISOString().split('T')[0]);
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error deleting transaction");
     }
+  };
 
-    const transactionTrend = last7Days.map(day => {
-      const count = transactions.filter(t => {
-        const tDate = new Date(t.date || t.createdAt).toISOString().split('T')[0];
-        return tDate === day;
-      }).length;
-      return {
-        date: new Date(day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        transactions: count
-      };
-    });
+  // Handle stock take delete
+  const handleDeleteStockTake = async (id) => {
+    if (!user) return;
+    if (!window.confirm("Are you sure you want to delete this stock take?")) return;
 
-    setChartData({
-      transactionTrend,
-      transactionTypes,
-      bookInventory,
-      locationInventory
-    });
-  }, [transactions, stockTakes]);
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/stocktake/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      if (res.ok) {
+        setStockTakes(stockTakes.filter(s => s._id !== id));
+      } else {
+        const json = await res.json();
+        alert("Failed to delete: " + (json.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error deleting stock take");
+    }
+  };
 
   const downloadCSV = () => {
     // Combine Transactions and StockTakes
@@ -170,152 +138,155 @@ const Reports = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#fff", padding: "24px", borderRadius: "8px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
-      <h3 style={{ marginTop: 0, marginBottom: "24px", fontSize: "20px", fontWeight: 600, color: "#059669" }}>
-        📊 Reports & Analytics
-      </h3>
-
-      {/* Charts Section */}
-      <div style={{ marginBottom: "40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "32px" }}>
-          {/* Transaction Trend Chart */}
-          <div style={{ backgroundColor: "#f9fafb", padding: "16px", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
-            <h4 style={{ marginTop: 0, marginBottom: "16px", fontSize: "14px", fontWeight: 600, color: "#374151" }}>
-              Transaction Trend (Last 7 Days)
-            </h4>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData.transactionTrend}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" fontSize={12} />
-                <YAxis fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="transactions" stroke="#3b82f6" strokeWidth={2} dot={{ fill: "#3b82f6" }} name="Transactions" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Transaction Types Pie Chart */}
-          <div style={{ backgroundColor: "#f9fafb", padding: "16px", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
-            <h4 style={{ marginTop: 0, marginBottom: "16px", fontSize: "14px", fontWeight: 600, color: "#374151" }}>
-              Transaction Type Distribution
-            </h4>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={chartData.transactionTypes}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={true}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {chartData.transactionTypes.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-          {/* Book Inventory Chart */}
-          <div style={{ backgroundColor: "#f9fafb", padding: "16px", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
-            <h4 style={{ marginTop: 0, marginBottom: "16px", fontSize: "14px", fontWeight: 600, color: "#374151" }}>
-              Book Inventory Levels
-            </h4>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData.bookInventory}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" fontSize={12} angle={-45} textAnchor="end" height={80} />
-                <YAxis fontSize={12} />
-                <Tooltip />
-                <Bar dataKey="quantity" fill="#10b981" name="Quantity" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Location Inventory Chart */}
-          <div style={{ backgroundColor: "#f9fafb", padding: "16px", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
-            <h4 style={{ marginTop: 0, marginBottom: "16px", fontSize: "14px", fontWeight: 600, color: "#374151" }}>
-              Inventory by Location
-            </h4>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData.locationInventory} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" fontSize={12} />
-                <YAxis dataKey="name" type="category" fontSize={12} width={100} />
-                <Tooltip />
-                <Bar dataKey="quantity" fill="#f59e0b" name="Total Units" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-
-      {/* CSV Download */}
+    <div className="bg-white p-4 rounded shadow" style={{ maxWidth: "100%" }}>
+      <h3 style={{ marginTop: 0, marginBottom: "16px", fontSize: "18px", fontWeight: 600, color: "#059669" }}>Reports</h3>
       <button
         onClick={downloadCSV}
         style={{
           backgroundColor: "#059669",
           color: "#fff",
           padding: "10px 16px",
-          borderRadius: "6px",
+          borderRadius: "var(--border-radius)",
           border: "none",
           cursor: "pointer",
-          fontWeight: 500,
-          fontSize: "14px",
           marginBottom: "24px",
-          width: "auto"
+          fontWeight: 500,
+          fontSize: "14px"
         }}
       >
-        📥 Download CSV Report
+        Download CSV
       </button>
 
-      {/* Data Table */}
-      <h4 style={{ marginTop: "32px", marginBottom: "16px", fontSize: "16px", fontWeight: 600, color: "#374151" }}>
-        Detailed Records
-      </h4>
-      <div style={{ overflowX: "auto" }}>
-        <table className="w-full text-sm" style={{ marginTop: "24px", width: "100%" }}>
-          <thead>
-            <tr style={{ backgroundColor: "#f3f4f6" }}>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Type</th>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Book Name</th>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Qty</th>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Date</th>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Location</th>
-              <th style={{ padding: "12px", textAlign: "left", fontWeight: 600, color: "#374151" }}>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map(t => (
+      <table className="w-full text-sm" style={{ marginTop: "24px" }}>
+        <thead>
+          <tr className="bg-gray-100">
+            <th style={{ padding: "12px", textAlign: "left" }}>Type</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Book Name</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Qty</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>From Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Inbound Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Outbound Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Location</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
+            <th style={{ padding: "12px", textAlign: "left" }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map(t => {
+            let inboundLoc = "-";
+            let outboundLoc = "-";
+            let fromLoc = "-";
+            let toLoc = "-";
+            
+            if (t.type === "inbound") {
+              inboundLoc = t.to_location || "-";
+            } else if (t.type === "outbound") {
+              outboundLoc = t.from_location || "-";
+            } else if (t.type === "movement") {
+              fromLoc = t.from_location || "-";
+              toLoc = t.to_location || "-";
+            }
+
+            return (
               <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                <td style={{ padding: "12px", color: "#10b981", fontWeight: 500 }}>{t.type.toUpperCase()}</td>
+                <td style={{ padding: "12px" }}>{t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
                 <td style={{ padding: "12px" }}>{t.item_name}</td>
                 <td style={{ padding: "12px" }}>{t.qty}</td>
-                <td style={{ padding: "12px" }}>{new Date(t.date || t.createdAt).toLocaleDateString()}</td>
-                <td style={{ padding: "12px" }}>{t.location || t.to_location || t.from_location || "-"}</td>
-                <td style={{ padding: "12px", fontSize: "12px", color: "#6b7280" }}>{t.notes || "-"}</td>
+                <td style={{ padding: "12px" }}>{new Date(t.date).toLocaleDateString()}</td>
+                <td style={{ padding: "12px" }}>{fromLoc}</td>
+                <td style={{ padding: "12px" }}>{toLoc}</td>
+                <td style={{ padding: "12px" }}>{inboundLoc}</td>
+                <td style={{ padding: "12px" }}>{outboundLoc}</td>
+                <td style={{ padding: "12px" }}>-</td>
+                <td style={{ padding: "12px" }}>{t.notes || "-"}</td>
+                <td style={{ padding: "12px" }}>Transaction</td>
+                <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                  {user && (user.role === "supervisor" || user._id === t.user_id) && (
+                    <>
+                      <span 
+                        onClick={() => setEditingTransaction(t)} 
+                        className="cursor-pointer text-green-500" 
+                        title="Edit"
+                        style={{ cursor: "pointer" }}
+                      >
+                        ✎
+                      </span>
+                      <span 
+                        onClick={() => handleDeleteTransaction(t._id)} 
+                        className="cursor-pointer text-red-500" 
+                        title="Delete"
+                        style={{ cursor: "pointer" }}
+                      >
+                        ✖
+                      </span>
+                    </>
+                  )}
+                </td>
               </tr>
-            ))}
-            {stockTakes.map(s => (
-              <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                <td style={{ padding: "12px", color: "#3b82f6", fontWeight: 500 }}>STOCK</td>
-                <td style={{ padding: "12px" }}>{s.item_name}</td>
-                <td style={{ padding: "12px" }}>{s.qty}</td>
-                <td style={{ padding: "12px" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
-                <td style={{ padding: "12px" }}>{s.location || "-"}</td>
-                <td style={{ padding: "12px", fontSize: "12px", color: "#6b7280" }}>{s.notes || "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+          {stockTakes.map(s => (
+            <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+              <td style={{ padding: "12px" }}>Stock Take</td>
+              <td style={{ padding: "12px" }}>{s.item_name}</td>
+              <td style={{ padding: "12px" }}>{s.qty}</td>
+              <td style={{ padding: "12px" }}>{new Date(s.createdAt).toLocaleDateString()}</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>-</td>
+              <td style={{ padding: "12px" }}>{s.location || "-"}</td>
+              <td style={{ padding: "12px" }}>{s.notes || "-"}</td>
+              <td style={{ padding: "12px" }}>Stock Take</td>
+              <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                {user && (user.role === "supervisor" || user._id === s.user_id) && (
+                  <>
+                    <span 
+                      onClick={() => setEditingStockTake(s)} 
+                      className="cursor-pointer text-green-500" 
+                      title="Edit"
+                      style={{ cursor: "pointer" }}
+                    >
+                      ✎
+                    </span>
+                    <span 
+                      onClick={() => handleDeleteStockTake(s._id)} 
+                      className="cursor-pointer text-red-500" 
+                      title="Delete"
+                      style={{ cursor: "pointer" }}
+                    >
+                      ✖
+                    </span>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {editingTransaction && (
+        <div style={{ marginTop: "32px", padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+          <h3 style={{ marginTop: 0, fontSize: "16px", fontWeight: 600 }}>Edit Transaction</h3>
+          <TransactionForm
+            editingTransaction={editingTransaction}
+            setEditingTransaction={setEditingTransaction}
+          />
+        </div>
+      )}
+
+      {editingStockTake && (
+        <div style={{ marginTop: "32px", padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+          <h3 style={{ marginTop: 0, fontSize: "16px", fontWeight: 600 }}>Edit Stock Take</h3>
+          <StockTakeForm
+            editingStockTake={editingStockTake}
+            setEditingStockTake={setEditingStockTake}
+          />
+        </div>
+      )}
     </div>
   );
 };
