@@ -160,10 +160,13 @@ nav button:hover {
 /* Form elements */
 label,
 input,
-select,
-button {
+select {
   display: block;
   width: 100%;
+}
+
+button {
+  display: block;
 }
 
 

@@ -75,7 +75,7 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow" style={{ maxWidth: "100%" }}>
+    <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow" style={{ maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
       <h3 style={{ marginTop: 0, marginBottom: "24px", fontSize: "18px", fontWeight: 600 }}>
         {editingTransaction ? "Edit Transaction" : "Add Transaction"}
       </h3>
@@ -160,7 +160,7 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction }) => {
         />
       </div>
 
-      <button className="bg-green-500 text-white px-4 py-2" style={{ marginBottom: "16px" }}>
+      <button className="bg-green-500 text-white px-4 py-2" style={{ marginBottom: "16px", width: "auto" }}>
         {editingTransaction ? "Update" : "Save"}
       </button>
 
