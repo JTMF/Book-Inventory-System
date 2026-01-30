@@ -157,41 +157,46 @@ const Reports = () => {
         Download CSV
       </button>
 
-      <table className="w-full text-sm" style={{ marginTop: "24px" }}>
-        <thead>
-          <tr className="bg-gray-100">
-            <th style={{ padding: "12px", textAlign: "left" }}>Type</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Book Name</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Qty</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>From Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>To Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Inbound Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Outbound Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Record Type</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map(t => {
-            let inboundLoc = "-";
-            let outboundLoc = "-";
-            let fromLoc = "-";
-            let toLoc = "-";
-            
-            if (t.type === "inbound") {
-              inboundLoc = t.to_location || "-";
-            } else if (t.type === "outbound") {
-              outboundLoc = t.from_location || "-";
-            } else if (t.type === "movement") {
-              fromLoc = t.from_location || "-";
-              toLoc = t.to_location || "-";
-            }
+      <div style={{
+        overflowX: "auto",
+        boxShadow: "var(--card-shadow)",
+        borderRadius: "var(--border-radius)"
+      }}>
+        <table className="w-full text-sm" style={{ marginTop: "24px", width: "100%", borderCollapse: "collapse", backgroundColor: "#fff" }}>
+          <thead>
+            <tr style={{ backgroundColor: "var(--primary)", color: "#fff" }}>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Type</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Book Name</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Qty</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Date</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>From Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>To Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Inbound Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Outbound Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Notes</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Record Type</th>
+              <th style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #ddd" }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map(t => {
+              let inboundLoc = "-";
+              let outboundLoc = "-";
+              let fromLoc = "-";
+              let toLoc = "-";
+              
+              if (t.type === "inbound") {
+                inboundLoc = t.to_location || "-";
+              } else if (t.type === "outbound") {
+                outboundLoc = t.from_location || "-";
+              } else if (t.type === "movement") {
+                fromLoc = t.from_location || "-";
+                toLoc = t.to_location || "-";
+              }
 
-            return (
-              <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+              return (
+                <tr key={t._id} style={{ borderBottom: "1px solid #eee" }}>
                 <td style={{ padding: "12px" }}>{t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
                 <td style={{ padding: "12px" }}>{t.item_name}</td>
                 <td style={{ padding: "12px" }}>{t.qty}</td>
@@ -227,9 +232,9 @@ const Reports = () => {
                 </td>
               </tr>
             );
-          })}
-          {stockTakes.map(s => (
-            <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+            })}
+            {stockTakes.map(s => (
+              <tr key={s._id} style={{ borderBottom: "1px solid #eee" }}>
               <td style={{ padding: "12px" }}>Stock Take</td>
               <td style={{ padding: "12px" }}>{s.item_name}</td>
               <td style={{ padding: "12px" }}>{s.qty}</td>
@@ -265,8 +270,9 @@ const Reports = () => {
               </td>
             </tr>
           ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
       {editingTransaction && (
         <div style={{ marginTop: "32px", padding: "16px", backgroundColor: "#f9f9f9", borderRadius: "8px" }}>

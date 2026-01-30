@@ -1,7 +1,7 @@
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
 }
 
 /* Responsive Design */
@@ -71,18 +71,30 @@
   --border-radius: 10px;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
 
 body {
   margin: 0;
+  padding: 0;
   font-family: "Poppins", sans-serif;
   background: var(--accent);
   color: #2d3436;
+  font-size: 14px;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
 }
 
 
 .pages {
   max-width: 1400px;
-  padding: 32px 60px;
+  padding: 28px 48px;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -90,13 +102,13 @@ body {
 /* Responsive spacing for smaller screens */
 @media (max-width: 1200px) {
   .pages {
-    padding: 32px 40px;
+    padding: 24px 36px;
   }
 }
 
 @media (max-width: 900px) {
   .pages {
-    padding: 32px 20px;
+    padding: 20px 16px;
   }
 }
 
@@ -105,6 +117,12 @@ body {
 header {
   background: var(--primary);
   box-shadow: var(--card-shadow);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
 }
 header .container {
   max-width: 1400px;
@@ -152,6 +170,54 @@ nav button {
 nav button:hover {
   background: var(--primary-dark);
   color: #fff;
+}
+
+/* Responsive Navbar - Medium screens */
+@media (max-width: 1200px) {
+  header {
+    padding: 0;
+  }
+  header > div {
+    padding: 0 24px;
+    height: auto;
+    min-height: 80px;
+  }
+}
+
+/* Responsive Navbar - Small/Mobile screens */
+@media (max-width: 900px) {
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header > div {
+    padding: 0 16px;
+    min-height: 70px;
+    flex-wrap: wrap;
+  }
+  nav {
+    flex-wrap: wrap;
+  }
+  nav a,
+  nav button {
+    margin-left: 8px;
+    padding: 6px 10px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 600px) {
+  header > div {
+    padding: 0 12px;
+    min-height: 60px;
+  }
+  nav a,
+  nav button {
+    margin-left: 4px;
+    padding: 4px 8px;
+    font-size: 0.85em;
+  }
 }
 
 
@@ -278,7 +344,7 @@ div.error {
 .report-card {
   background: #fff;
   border-radius: var(--border-radius);
-  padding: 28px 24px;
+  padding: 24px;
   margin-bottom: 20px;
   position: relative;
   box-shadow: var(--card-shadow);
@@ -294,8 +360,8 @@ div.error {
 form.signup,
 form.login {
   max-width: 400px;
-  margin: 48px auto;
-  padding: 32px 24px;
+  margin: 40px auto;
+  padding: 28px 24px;
   background: #fff;
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);

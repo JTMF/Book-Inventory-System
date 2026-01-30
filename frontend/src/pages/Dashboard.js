@@ -2,12 +2,15 @@ import { useEffect, useState } from "react"
 import { useTransactionContext } from "../hooks/useTransactionContext"
 import { useStockTakeContext } from "../hooks/useStockTakeContext"
 import { useAuthContext } from "../hooks/useAuthContext"
+import { mockTransactions, mockStockTakes } from "../mockData"
 
 import LiveDataShowcase from "../components/LiveDataShowcase"
 import TransactionDetails from "../components/TransactionDetails"
 import TransactionForm from "../components/TransactionForm"
 import StockTakeDetails from "../components/StockTakeDetails"
 import StockTakeForm from "../components/StockTakeForm"
+
+const USE_MOCK_DATA = true // Set to true to use local mock data, false to use API
 
 const Dashboard = () => {
   const { transactions, dispatch: dispatchTransactions } = useTransactionContext()
@@ -19,29 +22,36 @@ const Dashboard = () => {
   const [timeFilter, setTimeFilter] = useState("all")
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      })
-      const data = await res.json()
-      if (res.ok) {
-        dispatchTransactions({ type: "SET_TRANSACTIONS", payload: data })
+    if (USE_MOCK_DATA) {
+      // Use local mock data
+      dispatchTransactions({ type: "SET_TRANSACTIONS", payload: mockTransactions })
+      dispatchStockTakes({ type: "SET_STOCKTAKES", payload: mockStockTakes })
+    } else {
+      // Use API calls
+      const fetchTransactions = async () => {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        })
+        const data = await res.json()
+        if (res.ok) {
+          dispatchTransactions({ type: "SET_TRANSACTIONS", payload: data })
+        }
       }
-    }
 
-    const fetchStockTakes = async () => {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/stocktake`, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      })
-      const data = await res.json()
-      if (res.ok) {
-        dispatchStockTakes({ type: "SET_STOCKTAKES", payload: data })
+      const fetchStockTakes = async () => {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/stocktake`, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        })
+        const data = await res.json()
+        if (res.ok) {
+          dispatchStockTakes({ type: "SET_STOCKTAKES", payload: data })
+        }
       }
-    }
 
-    if (user) {
-      fetchTransactions()
-      fetchStockTakes()
+      if (user) {
+        fetchTransactions()
+        fetchStockTakes()
+      }
     }
   }, [dispatchTransactions, dispatchStockTakes, user])
 
@@ -57,22 +67,6 @@ const Dashboard = () => {
   const avgTurnover = transactions?.length > 0 
     ? (transactions.reduce((sum, t) => sum + t.quantity, 0) / Math.max(transactions.length, 1)).toFixed(1) 
     : 0
-
-  // Top Sellers - Aggregate by item
-  const itemSalesMap = {}
-  transactions?.forEach(t => {
-    const itemName = t.item_name || "Unknown"
-    if (!itemSalesMap[itemName]) {
-      itemSalesMap[itemName] = { name: itemName, quantity: 0, value: 0, count: 0 }
-    }
-    itemSalesMap[itemName].quantity += t.quantity || 0
-    itemSalesMap[itemName].value += (t.quantity * t.pricePerUnit) || 0
-    itemSalesMap[itemName].count += 1
-  })
-
-  const sortedItems = Object.values(itemSalesMap).sort((a, b) => b.quantity - a.quantity)
-  const topSellers = sortedItems.slice(0, 5)
-  const bottomSellers = sortedItems.slice(-5).reverse()
 
   // Shrinkage estimate (items in stock takes with discrepancies)
   const shrinkageItems = stockTakes?.filter(s => s.variance && s.variance < 0)?.length || 0
@@ -158,83 +152,6 @@ const Dashboard = () => {
           status={shrinkageRate > 5 ? "danger" : shrinkageRate > 2 ? "warning" : "success"}
           subtext={`${shrinkageItems} items with variance`}
         />
-      </div>
-
-      {/* Secondary KPIs - Top/Bottom Sellers */}
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        {/* Top 5 Sellers */}
-        <div style={{
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "var(--border-radius)",
-          boxShadow: "var(--card-shadow)",
-          border: "1px solid #e8eef7"
-        }}>
-          <h3 style={{ margin: "0 0 16px 0", fontSize: "16px", fontWeight: 700, color: "#1f2937" }}>📈 Top 5 Best Sellers</h3>
-          {topSellers.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {topSellers.map((item, idx) => (
-                <div key={idx} style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "12px",
-                  background: "#f9fafb",
-                  borderRadius: "8px",
-                  borderLeft: "4px solid #10b981"
-                }}>
-                  <div>
-                    <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#1f2937" }}>{idx + 1}. {item.name}</p>
-                    <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#999" }}>{item.count} transactions</p>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "var(--primary)" }}>{item.quantity} units</p>
-                    <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#999" }}>£{item.value.toFixed(2)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p style={{ color: "#999", fontSize: "14px" }}>No transaction data available</p>
-          )}
-        </div>
-
-        {/* Bottom 5 Slow Movers */}
-        <div style={{
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "var(--border-radius)",
-          boxShadow: "var(--card-shadow)",
-          border: "1px solid #e8eef7"
-        }}>
-          <h3 style={{ margin: "0 0 16px 0", fontSize: "16px", fontWeight: 700, color: "#1f2937" }}>📉 Bottom 5 Slow Movers</h3>
-          {bottomSellers.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {bottomSellers.map((item, idx) => (
-                <div key={idx} style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "12px",
-                  background: "#fef3f2",
-                  borderRadius: "8px",
-                  borderLeft: "4px solid #f5a623"
-                }}>
-                  <div>
-                    <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#1f2937" }}>{idx + 1}. {item.name}</p>
-                    <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#999" }}>{item.count} transactions</p>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "#f5a623" }}>{item.quantity} units</p>
-                    <p style={{ margin: "4px 0 0 0", fontSize: "12px", color: "#999" }}>£{item.value.toFixed(2)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p style={{ color: "#999", fontSize: "14px" }}>No transaction data available</p>
-          )}
-        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6 mt-4">

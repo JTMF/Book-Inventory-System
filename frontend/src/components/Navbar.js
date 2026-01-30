@@ -14,14 +14,15 @@ const Navbar = () => {
     const getLinkStyle = (isActive) => ({
         color: isActive ? "var(--primary)" : "#fff",
         fontWeight: 600,
-        padding: "10px 16px",
+        padding: "7px 12px",
         borderRadius: "var(--border-radius)",
         textDecoration: "none",
         transition: "all 0.2s ease",
         backgroundColor: isActive ? "#fff" : "transparent",
         border: "2px solid transparent",
         boxShadow: isActive ? "0 2px 8px rgba(40,54,80,0.1)" : "none",
-        cursor: "pointer"
+        cursor: "pointer",
+        fontSize: "13px"
     })
 
     const handleNavHover = (e, isActive) => {
@@ -42,16 +43,24 @@ const Navbar = () => {
             boxShadow: "var(--card-shadow)",
             position: "sticky",
             top: 0,
-            zIndex: 100
+            zIndex: 100,
+            width: "100%",
+            margin: "0",
+            padding: "0",
+            boxSizing: "border-box",
+            left: "0",
+            right: "0"
         }}>
             <div style={{ 
                 maxWidth: 1400, 
                 margin: "0 auto", 
-                padding: "0 24px", 
+                padding: "0 32px", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "space-between",
-                height: "90px"
+                height: "70px",
+                boxSizing: "border-box",
+                width: "100%"
             }}>
                 {/* Logo Section */}
                 <div style={{ 
@@ -71,8 +80,8 @@ const Navbar = () => {
                             src="/L & J warehouse Co..png" 
                             alt="L & J Warehouse Co Logo" 
                             style={{
-                                width: 90,
-                                height: 90,
+                                width: 60,
+                                height: 60,
                                 objectFit: "contain",
                                 flexShrink: 0,
                                 cursor: "pointer"
@@ -83,7 +92,7 @@ const Navbar = () => {
                         <h1 style={{ 
                             color: "#fff", 
                             fontWeight: 700, 
-                            fontSize: 26, 
+                            fontSize: 19, 
                             margin: 0,
                             lineHeight: "1"
                         }}>
@@ -104,7 +113,7 @@ const Navbar = () => {
                 <nav style={{ 
                     display: "flex", 
                     alignItems: "center", 
-                    gap: "4px",
+                    gap: "2px",
                     marginLeft: "auto",
                     flexWrap: "nowrap",
                     justifyContent: "flex-end"
@@ -184,12 +193,12 @@ const Navbar = () => {
                                 background: "var(--primary)",
                                 color: "#fff",
                                 border: "2px solid var(--primary)",
-                                padding: "10px 16px",
+                                padding: "7px 12px",
                                 borderRadius: "var(--border-radius)",
                                 fontWeight: 600,
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
-                                fontSize: "14px"
+                                fontSize: "13px"
                             }}
                                 onMouseOver={e => { 
                                     e.target.style.backgroundColor = "#fff"; 

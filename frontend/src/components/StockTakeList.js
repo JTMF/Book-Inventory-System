@@ -103,20 +103,25 @@ const StockTakeList = () => {
         </div>
       )}
 
-      <table className="w-full text-sm" style={{ marginTop: "24px" }}>
-        <thead>
-          <tr className="bg-gray-100">
-            <th style={{ padding: "12px", textAlign: "left" }}>Book Name</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Qty</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Location</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Date</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Notes</th>
-            <th style={{ padding: "12px", textAlign: "left" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stockTakes.map(s => (
-            <tr key={s._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
+      <div style={{
+        overflowX: "auto",
+        boxShadow: "var(--card-shadow)",
+        borderRadius: "var(--border-radius)"
+      }}>
+        <table className="w-full text-sm" style={{ marginTop: "24px", width: "100%", borderCollapse: "collapse", backgroundColor: "#fff" }}>
+          <thead>
+            <tr style={{ backgroundColor: "var(--primary)", color: "#fff" }}>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Book Name</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Qty</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Location</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Date</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Notes</th>
+              <th style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #ddd" }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockTakes.map(s => (
+              <tr key={s._id} style={{ borderBottom: "1px solid #eee" }}>
               <td style={{ padding: "12px" }}>{s.item_name}</td>
               <td style={{ padding: "12px" }}>{s.qty}</td>
               <td style={{ padding: "12px" }}>{s.location || "-"}</td>
@@ -149,8 +154,9 @@ const StockTakeList = () => {
               </td>
             </tr>
           ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
       {stockTakes.length === 0 && (
         <p style={{ textAlign: "center", color: "#999", marginTop: "24px" }}>No stock takes yet</p>
