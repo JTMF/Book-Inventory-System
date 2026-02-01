@@ -36,7 +36,7 @@ const StockTakeDetails = ({ stockTake, setEditingStockTake }) => {
   return (
     <div className="bg-white rounded p-3 shadow-sm mb-2 relative">
       <h4 className="text-blue-600 font-semibold">Stock Take</h4>
-      <p>Book Name: {stockTake.item_name}</p>
+      <p>File Name: {stockTake.item_name}</p>
       <p>Quantity: {stockTake.qty}</p>
       <p>Location: {stockTake.location || "-"}</p>
       <p>Notes: {stockTake.notes || "-"}</p>

@@ -111,7 +111,7 @@ const StockTakeList = () => {
         <table className="w-full text-sm" style={{ marginTop: "24px", width: "100%", borderCollapse: "collapse", backgroundColor: "#fff" }}>
           <thead>
             <tr style={{ backgroundColor: "var(--primary)", color: "#fff" }}>
-              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Book Name</th>
+              <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>File Name</th>
               <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Qty</th>
               <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Location</th>
               <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Date</th>

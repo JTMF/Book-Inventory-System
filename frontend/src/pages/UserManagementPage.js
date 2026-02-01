@@ -51,8 +51,7 @@ const UserManagementPage = () => {
             setFilteredUsers(users)
         } else {
             const filtered = users.filter(user =>
-                user.email.toLowerCase().includes(query.toLowerCase()) ||
-                (user.name && user.name.toLowerCase().includes(query.toLowerCase()))
+                user.email.toLowerCase().includes(query.toLowerCase())
             )
             setFilteredUsers(filtered)
         }
@@ -138,7 +137,7 @@ const UserManagementPage = () => {
             <div style={{ marginBottom: "20px" }}>
                 <input
                     type="text"
-                    placeholder="Search users by email or name..."
+                    placeholder="Search users by email..."
                     value={searchQuery}
                     onChange={handleSearch}
                     style={{
@@ -176,7 +175,6 @@ const UserManagementPage = () => {
                                         color: "#fff"
                                     }}>
                                         <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Email</th>
-                                        <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Name</th>
                                         <th style={{ padding: "12px", textAlign: "left", borderBottom: "2px solid #ddd" }}>Role</th>
                                         <th style={{ padding: "12px", textAlign: "center", borderBottom: "2px solid #ddd" }}>Actions</th>
                                     </tr>
@@ -188,7 +186,6 @@ const UserManagementPage = () => {
                                             "&:hover": { backgroundColor: "#f9f9f9" }
                                         }}>
                                             <td style={{ padding: "12px" }}>{userItem.email}</td>
-                                            <td style={{ padding: "12px" }}>{userItem.name || "N/A"}</td>
                                             <td style={{ padding: "12px" }}>
                                                 {editingId === userItem._id ? (
                                                     <select
