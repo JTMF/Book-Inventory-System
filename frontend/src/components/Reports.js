@@ -14,14 +14,12 @@ const Reports = () => {
     const fetchData = async () => {
       if (!user) return;
 
-      // Fetch Transactions
       const tRes = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       const tJson = await tRes.json();
       if (tRes.ok) setTransactions(tJson);
 
-      // Fetch Stock Takes
       const sRes = await fetch(`${process.env.REACT_APP_API_URL}/api/stocktake`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
@@ -32,7 +30,6 @@ const Reports = () => {
     fetchData();
   }, [user]);
 
-  // Handle transaction delete
   const handleDeleteTransaction = async (id) => {
     if (!user) return;
     if (!window.confirm("Are you sure you want to delete this transaction?")) return;
@@ -55,7 +52,6 @@ const Reports = () => {
     }
   };
 
-  // Handle stock take delete
   const handleDeleteStockTake = async (id) => {
     if (!user) return;
     if (!window.confirm("Are you sure you want to delete this stock take?")) return;
@@ -79,7 +75,6 @@ const Reports = () => {
   };
 
   const downloadCSV = () => {
-    // Combine Transactions and StockTakes
     const csvRows = [
       ["Type", "Book Name", "Quantity", "Date", "From Location", "To Location", "Inbound Location", "Outbound Location", "Location", "Notes", "Record Type"]
     ];

@@ -12,7 +12,7 @@ router.use(requireAuth);
 
 router.get("/", getStockTakes);
 router.post("/", createStockTake);
-router.put("/:id", updateStockTake);   // NEW: update endpoint
+router.put("/:id", updateStockTake);
 router.delete("/:id", deleteStockTake);
 
 module.exports = router;

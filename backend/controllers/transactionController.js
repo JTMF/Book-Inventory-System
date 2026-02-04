@@ -1,6 +1,5 @@
 const Transaction = require("../models/transactionModel");
 
-// Get transactions
 const getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find().sort({ date: -1 });
@@ -49,7 +48,6 @@ const updateTransaction = async (req, res) => {
   }
 
   try {
-    // Supervisors can update any transaction, others can only update their own
     const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
     const transaction = await Transaction.findOneAndUpdate(
       query,
@@ -80,7 +78,6 @@ const deleteTransaction = async (req, res) => {
   console.log(`Delete attempt - ID: ${id}, User: ${user_id}, Role: ${userRole}`);
 
   try {
-    // Supervisors can delete any transaction, others can only delete their own
     const query = userRole === "supervisor" ? { _id: id } : { _id: id, user_id };
     console.log("Query:", query);
     const transaction = await Transaction.findOneAndDelete(query);

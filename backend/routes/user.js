@@ -13,7 +13,6 @@ const router = express.Router()
 router.post("/signup", signupUser)
 router.post("/login", loginUser)
 
-// Supervisor routes
 router.get("/all", requireSupervisor, getAllUsers)
 router.get("/search", requireSupervisor, searchUsers)
 router.put("/:userId", requireSupervisor, updateUserRole)

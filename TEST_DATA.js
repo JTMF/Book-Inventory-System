@@ -1,18 +1,3 @@
-/**
- * TEST_DATA.js - Comprehensive Test Data for Book Inventory System
- * 
- * This file contains sample data that can be used to populate the database
- * and demonstrate all system functionalities including:
- * - User Authentication (Supervisor, Operator roles)
- * - Inventory Management (Items, Locations)
- * - Transaction Management (Inbound/Outbound)
- * - Stock Takes (Physical counts, variances)
- * - Reports and Analytics
- */
-
-// =====================================================================
-// USERS - Test Accounts for Different Roles
-// =====================================================================
 const testUsers = {
   supervisor: {
     email: "supervisor@inventory.com",
@@ -42,9 +27,6 @@ const testUsers = {
   ]
 };
 
-// =====================================================================
-// LOCATIONS - Warehouse Locations
-// =====================================================================
 const testLocations = [
   {
     location_name: "Main Warehouse",
@@ -80,9 +62,6 @@ const testLocations = [
   }
 ];
 
-// =====================================================================
-// ITEMS - Book Inventory
-// =====================================================================
 const testItems = [
   { item_name: "The Great Gatsby", sku: "BOOK-001" },
   { item_name: "To Kill a Mockingbird", sku: "BOOK-002" },
@@ -98,9 +77,6 @@ const testItems = [
   { item_name: "Moby Dick", sku: "BOOK-012" }
 ];
 
-// =====================================================================
-// TRANSACTIONS - Inbound & Outbound Transactions
-// =====================================================================
 const testTransactions = {
   inbound: [
     {
@@ -234,9 +210,6 @@ const testTransactions = {
   ]
 };
 
-// =====================================================================
-// STOCK TAKES - Physical Inventory Counts
-// =====================================================================
 const testStockTakes = [
   {
     stock_take_name: "Monthly Stock Take - January Week 1",
@@ -426,38 +399,6 @@ const systemSummary = {
     ]
   }
 };
-
-// =====================================================================
-// USAGE INSTRUCTIONS
-// =====================================================================
-/*
-IMPORTING THIS DATA:
-
-1. For Backend (Node.js/MongoDB):
-   - Use the seed.js file to populate the database with this test data
-   - Modify seed.js to reference this file and insert the data
-
-2. For Frontend (React Testing):
-   - Import this file in mockData.js or test files
-   - Use in Redux/Context providers for testing components
-   - Reference for expected data structures
-
-3. To Load Data Into System:
-   - Option A: Run backend seed script with this data
-   - Option B: Manually create users, then use API endpoints to add transactions
-   - Option C: Import via admin panel (if available)
-
-4. User Credentials for Testing:
-   - Supervisor: supervisor@inventory.com / SupervisorPassword123!
-   - Operator: operator1@inventory.com / OperatorPass123!
-
-5. Testing Scenarios:
-   - Create transactions and view dashboard KPIs
-   - Perform stock takes on different locations
-   - Generate transaction reports with date filters
-   - Monitor stock accuracy and shrinkage rates
-   - Test user roles and access permissions
-*/
 
 module.exports = {
   testUsers,

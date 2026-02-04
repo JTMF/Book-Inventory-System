@@ -4,11 +4,9 @@ const User = require("./models/userModel")
 
 const seedSupervisorUser = async () => {
     try {
-        // Connect to MongoDB
         await mongoose.connect(process.env.MONGO_URI)
         console.log("Connected to database")
 
-        // Check if supervisor already exists
         const existingSupervisor = await User.findOne({ email: "supervisor@inventory.com" })
         if (existingSupervisor) {
             console.log("Supervisor user already exists")
@@ -16,7 +14,6 @@ const seedSupervisorUser = async () => {
         }
 
         // Create supervisor user
-        const supervisorUser = await User.signup(
             "supervisor@inventory.com",
             "SupervisorPassword123!",
             "supervisor"
