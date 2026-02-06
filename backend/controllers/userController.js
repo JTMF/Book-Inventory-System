@@ -77,7 +77,7 @@ const updateUserRole = async (req, res) => {
     }
 }
 
-// Delete user (supervisor only)
+const deleteUser = async (req, res) => {
     try {
         const { userId } = req.params
         
