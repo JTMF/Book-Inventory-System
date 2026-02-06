@@ -2,8 +2,17 @@ const StockTake = require("../models/stockTakeModel");
 
 const getStockTakes = async (req, res) => {
   try {
-    const stockTakes = await StockTake.find().sort({ createdAt: -1 });
-    res.status(200).json(stockTakes);
+    const stockTakes = await StockTake.find()
+      .populate("user_id", "email")
+      .sort({ createdAt: -1 });
+    
+    // Add createdBy field for compatibility with frontend
+    const enrichedStockTakes = stockTakes.map(s => ({
+      ...s.toObject(),
+      createdBy: s.user_id?.email || "Unknown"
+    }));
+    
+    res.status(200).json(enrichedStockTakes);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch stock takes" });
   }

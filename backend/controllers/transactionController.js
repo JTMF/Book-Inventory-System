@@ -2,8 +2,17 @@ const Transaction = require("../models/transactionModel");
 
 const getTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.find().sort({ date: -1 });
-    res.status(200).json(transactions);
+    const transactions = await Transaction.find()
+      .populate("user_id", "email")
+      .sort({ date: -1 });
+    
+    // Add createdBy field for compatibility with frontend
+    const enrichedTransactions = transactions.map(t => ({
+      ...t.toObject(),
+      createdBy: t.user_id?.email || "Unknown"
+    }));
+    
+    res.status(200).json(enrichedTransactions);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch transactions" });
   }
