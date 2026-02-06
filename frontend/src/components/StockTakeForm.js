@@ -58,7 +58,6 @@ const StockTakeForm = ({ editingStockTake, setEditingStockTake, onSuccess }) => 
       setNotes("");
       setError(null);
       
-      // Call onSuccess callback if provided
       if (onSuccess) {
         onSuccess(json, !!editingStockTake);
       }

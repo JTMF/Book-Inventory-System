@@ -27,7 +27,6 @@ const signupUser = async (req, res) => {
     }
 }
 
-// Get all users (supervisor only)
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}).select("-password")
@@ -37,7 +36,6 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-// Search users (supervisor only)
 const searchUsers = async (req, res) => {
     try {
         const { query } = req.query
@@ -59,7 +57,6 @@ const searchUsers = async (req, res) => {
     }
 }
 
-// Update user role (supervisor only)
 const updateUserRole = async (req, res) => {
     try {
         const { userId } = req.params
@@ -81,7 +78,6 @@ const updateUserRole = async (req, res) => {
 }
 
 // Delete user (supervisor only)
-const deleteUser = async (req, res) => {
     try {
         const { userId } = req.params
         

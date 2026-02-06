@@ -10,7 +10,6 @@ const Navbar = () => {
         logout()
     }
 
-    // Common styles for nav links
     const getLinkStyle = (isActive) => ({
         color: isActive ? "var(--primary)" : "#fff",
         fontWeight: 600,
@@ -62,7 +61,6 @@ const Navbar = () => {
                 boxSizing: "border-box",
                 width: "100%"
             }}>
-                {/* Logo Section */}
                 <div style={{ 
                     display: "flex",
                     alignItems: "center",
@@ -75,7 +73,6 @@ const Navbar = () => {
                         alignItems: "center",
                         flexShrink: 0
                     }}>
-                        {/* Logo Image */}
                         <img 
                             src="/L & J warehouse Co..png" 
                             alt="L & J Warehouse Co Logo" 

@@ -26,7 +26,6 @@ const StockTakeList = () => {
     fetchStockTakes();
   }, [user]);
 
-  // Handle stock take delete
   const handleDeleteStockTake = async (id) => {
     if (!user) return;
     if (!window.confirm("Are you sure you want to delete this stock take?")) return;

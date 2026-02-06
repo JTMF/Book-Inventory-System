@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useTransactionContext } from "../hooks/useTransactionContext"
 import { useStockTakeContext } from "../hooks/useStockTakeContext"
 import { useAuthContext } from "../hooks/useAuthContext"
-import { mockTransactions, mockStockTakes } from "../mockData"
 
 import LiveDataShowcase from "../components/LiveDataShowcase"
 import TransactionDetails from "../components/TransactionDetails"
@@ -10,7 +9,7 @@ import TransactionForm from "../components/TransactionForm"
 import StockTakeDetails from "../components/StockTakeDetails"
 import StockTakeForm from "../components/StockTakeForm"
 
-const USE_MOCK_DATA = true // Set to true to use local mock data, false to use API
+const USE_MOCK_DATA = false
 
 const Dashboard = () => {
   const { transactions, dispatch: dispatchTransactions } = useTransactionContext()
@@ -23,11 +22,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (USE_MOCK_DATA) {
-      // Use local mock data
-      dispatchTransactions({ type: "SET_TRANSACTIONS", payload: mockTransactions })
-      dispatchStockTakes({ type: "SET_STOCKTAKES", payload: mockStockTakes })
+      console.log("Mock data mode is enabled but mockData.js was deleted")
     } else {
-      // Use API calls
       const fetchTransactions = async () => {
         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
           headers: { Authorization: `Bearer ${user.token}` }
@@ -55,24 +51,19 @@ const Dashboard = () => {
     }
   }, [dispatchTransactions, dispatchStockTakes, user])
 
-  // Calculate KPIs
   const totalStockTakes = stockTakes?.length || 0
 
-  // Stock Accuracy % - Completed vs Total stock takes
   const completedStockTakes = stockTakes?.filter(s => s.status === 'Completed')?.length || 0
   const stockAccuracy = totalStockTakes > 0 ? Math.round((completedStockTakes / totalStockTakes) * 100) : 0
 
-  // Inventory Turnover - Based on transaction frequency
   const inventoryTurnover = transactions?.length > 0 ? transactions.length : 0
   const avgTurnover = transactions?.length > 0 
     ? (transactions.reduce((sum, t) => sum + t.quantity, 0) / Math.max(transactions.length, 1)).toFixed(1) 
     : 0
 
-  // Shrinkage estimate (items in stock takes with discrepancies)
   const shrinkageItems = stockTakes?.filter(s => s.variance && s.variance < 0)?.length || 0
   const shrinkageRate = totalStockTakes > 0 ? Math.round((shrinkageItems / totalStockTakes) * 100) : 0
 
-  // Filter transactions by time
   const getFilteredTransactions = () => {
     const now = new Date()
     return transactions?.filter(t => {

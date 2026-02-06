@@ -33,7 +33,6 @@ const TransactionForm = ({ editingTransaction, setEditingTransaction, onSuccess 
 
     let transactionData = { type, item_name, qty, notes };
 
-    // Add location fields based on transaction type
     if (type === "movement") {
       transactionData.from_location = from_location;
       transactionData.to_location = to_location;

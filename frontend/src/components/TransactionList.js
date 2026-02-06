@@ -26,7 +26,6 @@ const TransactionList = () => {
     fetchTransactions();
   }, [user]);
 
-  // Handle transaction delete
   const handleDeleteTransaction = async (id) => {
     if (!user) return;
     if (!window.confirm("Are you sure you want to delete this transaction?")) return;
